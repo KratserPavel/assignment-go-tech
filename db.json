@@ -1,0 +1,51 @@
+{
+  "questions": [
+    {
+      "id": "favLang",
+      "title": "What language is your favorite?",
+      "type": "multiplyChoice",
+      "required": true,
+      "options": [
+        {
+          "label": "JavaScript"
+        },
+        {
+          "label": "TypeScript"
+        },
+        {
+          "label": "coffeeScript"
+        }
+      ]
+    },
+    {
+      "id": "love",
+      "title": "What do you like about programming?",
+      "type": "textInput",
+      "required": false
+    },
+    {
+      "id": "recap",
+      "title": "How was the assignment?",
+      "type": "multiplyChoice",
+      "required": true,
+      "options": [
+        {
+          "label": "Easy"
+        },
+        {
+          "label": "Normal"
+        },
+        {
+          "label": "Hard"
+        },
+        {
+          "label": "Other",
+          "textInput": true
+        }
+      ]
+    }
+  ],
+  "answers": [
+
+  ]
+}
