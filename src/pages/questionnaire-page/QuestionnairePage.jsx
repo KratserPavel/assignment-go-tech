@@ -1,48 +1,43 @@
-import React, {useEffect, useState} from 'react';
-import * as questionnaireService from "../../services/QuestionnaireService";
-import {validateForm} from "./utils";
+import React, { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { validateForm } from "./utils";
 import QuestionContainer from "../../components/question-container/QuestionContainer";
+import { getAnswers, getQuestions } from "../../reducers/form/reducer";
+import {
+  fetchQuestionsAction,
+  postAnswersAction,
+} from "../../reducers/form/actions";
 
 const QuestionnairePage = () => {
-    const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState({});
+  const questions = useSelector(getQuestions);
+  const answers = useSelector(getAnswers);
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-        questionnaireService.getAllQuestions()
-            .then(questions => {
-                setQuestions(questions)
-                setAnswers(questions.reduce((res, question) => ({...res, [question.id]: ''}), {}))
-            })
-    }, [])
+  useEffect(() => {
+    dispatch(fetchQuestionsAction());
+  }, [dispatch]);
 
-    const onFormSubmit = (e) => {
-        e.preventDefault()
+  const onFormSubmit = (e) => {
+    e.preventDefault();
 
-        if (!validateForm(questions, answers)) return;
+    if (!validateForm(questions, answers)) return;
 
-        const request = Object.keys(answers).map(key => ({id: key, answer: answers[key]}))
+    dispatch(postAnswersAction(answers));
+    e.target.reset();
+  };
 
-        questionnaireService.postAllAnswers(request);
+  const questionsRendered = questions.length
+    ? questions.map((question) => (
+        <QuestionContainer key={question.id} question={question} />
+      ))
+    : "";
 
-        e.target.reset()
-    }
-
-    const onChangeHandler = value => setAnswers({...answers, [value.id]: value.state})
-
-    const questionsRendered = questions.length ?
-        questions.map(question => <QuestionContainer key={question.id}
-                                                     onChange={onChangeHandler}
-                                                     value={answers[question.id]}
-                                                     question={question}/>) : ''
-
-    return (
-        <form onSubmit={onFormSubmit}>
-            <div>
-                {questionsRendered}
-            </div>
-            <button type="submit">Submit</button>
-        </form>
-    );
+  return (
+    <form onSubmit={onFormSubmit}>
+      <div>{questionsRendered}</div>
+      <button type="submit">Submit</button>
+    </form>
+  );
 };
 
 export default QuestionnairePage;

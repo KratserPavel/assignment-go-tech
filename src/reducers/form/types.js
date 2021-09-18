@@ -1,0 +1,3 @@
+export const REQUEST_QUESTIONS = "GET_QUESTIONS";
+export const SET_ANSWER = "SET_ANSWER";
+export const RESET_ANSWERS = "RESET_ANSWERS";
