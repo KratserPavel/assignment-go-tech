@@ -1,70 +1,33 @@
-# Getting Started with Create React App
+# Go-tech App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
 
-In the project directory, you can run:
+In the project directory, you should run scripts below in defined order:
 
-### `npm start`
+### 1) `json-server --watch db.json`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Runs mock-server to get initial data and to save the result on from submitting. 
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+### 2) `npm start`
 
-### `npm test`
+Runs the app in the development mode.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## POSSIBLE SOLUTIONS
 
-### `npm run build`
+git history keeps all the variants of application's data flow.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Uncontrolled 
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+A first workable variant is uncontrolled (stateless) components of form in react.\
+This solution looks simple, but not really appropriate in case of custom input fields such as 'Other' radio input along with plain text input.\
+This case there's bit complicated and non-universal logic on submit handling (onFormSubmit() in QuestionnairePage.jsx).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Controlled 
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+A second workable variant is controlled (stateful) components of form in react.\
+This solution looks bit better because it keeps all the states of input fields in one place (answers in QuestionnairePage.jsx) from where it can be used in any place.\
+This way complex logic of custom inputs can be hidden inside relative corresponding component.\
+The biggest disadvantage of this solution is that it forces re-rendering of all components in the form when common state is changing because the state is in the common parent component.\ 
+ 

@@ -1,50 +1,38 @@
 import React, {useEffect, useState} from 'react';
 import * as questionnaireService from "../../services/QuestionnaireService";
+import {validateForm} from "./utils";
 import QuestionContainer from "../../components/question-container/QuestionContainer";
 
 const QuestionnairePage = () => {
     const [questions, setQuestions] = useState([]);
+    const [answers, setAnswers] = useState({});
 
     useEffect(() => {
         questionnaireService.getAllQuestions()
-            .then(questions => setQuestions(questions))
+            .then(questions => {
+                setQuestions(questions)
+                setAnswers(questions.reduce((res, question) => ({...res, [question.id]: ''}), {}))
+            })
     }, [])
 
     const onFormSubmit = (e) => {
         e.preventDefault()
-        const formData = new FormData(e.target)
 
-        const res = []
-        for (let question of questions) {
-            const {id, options} = question
-            let answer = formData.getAll(id)
+        if (!validateForm(questions, answers)) return;
 
-            // if statements describe the case of radio & text inputs in line
-            if (answer.length > 1 && answer[0] === 'Other') {
-                answer = answer[1]
-            } else if (answer.length > 1 && answer[0] !== 'Other') {
-                answer = answer[0]
-            } else if (answer.length === 1 && answer[0] === 'Other') {
-                alert('fill all required fields')
-                return;
-            } else if(answer.length === 1 && options && !options.some(o => o.label === answer[0])){
-                alert('fill all required fields')
-                return;
-            }
+        const request = Object.keys(answers).map(key => ({id: key, answer: answers[key]}))
 
-            if (question.required && !answer) {
-                alert('fill all required fields')
-                return
-            }
+        questionnaireService.postAllAnswers(request);
 
-            res.push({id, answer})
-        }
-        questionnaireService.postAllAnswers(res).then((res) => console.log(res))
-
+        e.target.reset()
     }
+
+    const onChangeHandler = value => setAnswers({...answers, [value.id]: value.state})
 
     const questionsRendered = questions.length ?
         questions.map(question => <QuestionContainer key={question.id}
+                                                     onChange={onChangeHandler}
+                                                     value={answers[question.id]}
                                                      question={question}/>) : ''
 
     return (
