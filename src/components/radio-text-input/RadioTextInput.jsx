@@ -1,25 +1,37 @@
-import React, {useState} from 'react';
+import React from 'react';
 
-const RadioTextInput = ({label, valueGetter, name}) => {
-    const [inputValue, setInputValue] = useState('')
+const RadioTextInput = ({options, name}) => {
 
-    // const onChangeRadioHandler = () => valueGetter(inputValue)
-    const onChangeInputHandler = e => setInputValue(e.target.value)
+    const optionsRendered = options.map(option => {
+        const {label, textInput} = option
+
+        return (!textInput ?
+                <label>
+                    <input id={label}
+                           value={label}
+                           name={name}
+                           type="radio"
+                    />
+                    {label}
+                </label>
+                :
+                <label>
+                    <input id={label}
+                           value={label}
+                           name={name}
+                           type="radio"
+                    />
+                    {label}
+                    <input name={name}/>
+                </label>
+        )
+    })
 
     return (
         <div>
-            <label>
-                <input id={label}
-                       value={label}
-                       name={name}
-                       type="radio"
-                       // onChange={onChangeRadioHandler}
-                />
-                {label}
-            </label>
-            <input name={name} value={inputValue} onChange={onChangeInputHandler}/>
+            {optionsRendered}
         </div>
-    );
-};
+    )
+}
 
 export default RadioTextInput;

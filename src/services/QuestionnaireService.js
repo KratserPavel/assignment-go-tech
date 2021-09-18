@@ -9,8 +9,12 @@ export const getAllQuestions = () => {
 }
 
 export const postAllAnswers = (answers) => {
+    console.log(Array.isArray(answers))
     return fetch(ANSWERS_POST_URL, {
         method: "POST",
-        body: answers
+        body: answers,
+        headers: {
+            "Content-Type": "application/json"
+        }
     }).then(response => response.json())
 }

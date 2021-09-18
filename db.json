@@ -26,7 +26,7 @@
     {
       "id": "recap",
       "title": "How was the assignment?",
-      "type": "multiplyChoice",
+      "type": "multiplyChoiceWithOther",
       "required": true,
       "options": [
         {
@@ -46,6 +46,17 @@
     }
   ],
   "answers": [
-
+    {
+      "id": "favLang",
+      "answer": "JavaScript"
+    },
+    {
+      "id": "love",
+      "answer": "structural and consistent solutions"
+    },
+    {
+      "id": "recap",
+      "answer": "Pretty nice"
+    }
   ]
 }

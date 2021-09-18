@@ -3,9 +3,7 @@ import * as questionnaireService from "../../services/QuestionnaireService";
 import QuestionContainer from "../../components/question-container/QuestionContainer";
 
 const QuestionnairePage = () => {
-
     const [questions, setQuestions] = useState([]);
-    const [answers, setAnswers] = useState([]);
 
     useEffect(() => {
         questionnaireService.getAllQuestions()
@@ -18,68 +16,36 @@ const QuestionnairePage = () => {
 
         const res = []
         for (let question of questions) {
-            const id = question.id
+            const {id, options} = question
             let answer = formData.getAll(id)
 
+            // if statements describe the case of radio & text inputs in line
             if (answer.length > 1 && answer[0] === 'Other') {
                 answer = answer[1]
-            } else {
+            } else if (answer.length > 1 && answer[0] !== 'Other') {
                 answer = answer[0]
+            } else if (answer.length === 1 && answer[0] === 'Other') {
+                alert('fill all required fields')
+                return;
+            } else if(answer.length === 1 && options && !options.some(o => o.label === answer[0])){
+                alert('fill all required fields')
+                return;
             }
 
-            if (question.required && !formData.get(question.id)) {
+            if (question.required && !answer) {
                 alert('fill all required fields')
                 return
             }
 
-            res.push({
-                id,
-                answer
-            })
-
+            res.push({id, answer})
         }
+        questionnaireService.postAllAnswers(res).then((res) => console.log(res))
 
-        // console.log(res)
-
-        // if (!validateAnswers) {
-        //     alert('fill all required fields')
-        //     return;
-        // }
-        // questionnaireService.postAllAnswers(answers)
-        //     .then(res => alert(res))
-
-    }
-
-    const validateAnswers = answers => {
-        // if (answers.length !== questions.length) {
-        //     return false;
-        // }
-        // for (let i = 0; i < answers.length; i++) {
-        //    if((questions[i].id === answers[i].id) && questions[i].required && !answers[i].value) {
-        //        return false;
-        //    }
-        //
-        // }
-        return true;
-    }
-
-    const getAnswerHandler = (answer) => {
-        // const index = answers.findIndex(a => a.id === answer.id);
-        //
-        // if (index !== -1) {
-        //     answers[index] = answer
-        //     setAnswers([...answers])
-        // } else {
-        //     setAnswers([...answers, answer])
-        // }
-
-        // console.log(answers)
     }
 
     const questionsRendered = questions.length ?
         questions.map(question => <QuestionContainer key={question.id}
-                                                     question={question}
-                                                     valueGetter={getAnswerHandler}/>) : ''
+                                                     question={question}/>) : ''
 
     return (
         <form onSubmit={onFormSubmit}>

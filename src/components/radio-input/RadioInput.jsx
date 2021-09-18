@@ -1,19 +1,24 @@
 import React from 'react';
 
-const RadioInput = ({label, valueGetter, name}) => {
-    // const changeRadioHandler = e => valueGetter(e.target.value)
+const RadioInput = ({options, name}) => {
 
-    return (
-        <div>
+    const optionsRendered = options.map(option => {
+        const {label} = option
+
+        return (
             <label>
                 <input id={label}
                        value={label}
                        name={name}
-                       type="radio"
-                       // onChange={changeRadioHandler}
-                    />
+                       type="radio"/>
                 {label}
             </label>
+        )
+    })
+
+    return (
+        <div>
+            {optionsRendered}
         </div>
     )
 }
